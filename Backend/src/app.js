@@ -20,6 +20,12 @@ app.use(
   }),
 );
 
+// import the routes
+import healthcheckRouter from './routes/healthcheck.route.js'
+
+// routes
+app.use("/api/v1/healthcheck", healthcheckRouter)
+
 app.get("/", (req, res) => {
   res.send("Welcome to FitTrack");
 });
