@@ -1,0 +1,21 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "APIs for Frontend",
+  "keywords": [
+    "\"API\"",
+    "\"Node\"",
+    "\"Express\"",
+    "\"Mongoose\""
+  ],
+  "license": "ISC",
+  "author": "Piyush Raj",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "devDependencies": {
+    "prettier": "3.6.2"
+  }
+}
