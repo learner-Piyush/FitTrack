@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import crypto from "crypto";
+import crypto, { publicDecrypt } from "crypto";
 
 const userSchema = new Schema(
   {
@@ -9,10 +9,12 @@ const userSchema = new Schema(
       type: {
         url: String,
         localPath: String,
+        publicId: String
       },
       default: {
         url: `https://placehold.co/200x200`,
         localPath: "",
+        publicId: ""
       },
     },
     username: {
