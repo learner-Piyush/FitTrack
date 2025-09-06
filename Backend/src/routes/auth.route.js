@@ -28,14 +28,13 @@ import { verifyJWT } from "../middlewares/auth.middleware.js";
 const router = Router();
 
 // unsecured routes
-router
-  .route("/register")
-  .post(
-    userRegisterValidator(),
-    validate,
-    upload.fields([{ name: "avatar", maxCount: 1 }]),
-    registerUser,
-  );
+router.post(
+  "/register",
+  upload.fields([{ name: "avatar", maxCount: 1 }]),
+  userRegisterValidator(),
+  validate,
+  registerUser,
+);
 router.route("/login").post(userLoginValidator(), loginUser);
 router.route("/verify-email/:verificationToken").get(verifyEmail);
 router.route("/refresh-token").post(refreshAccessToken);

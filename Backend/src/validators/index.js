@@ -8,6 +8,7 @@ const userRegisterValidator = () => {
       .withMessage("Email is required")
       .isEmail()
       .withMessage("Email is invalid"),
+
     body("username")
       .trim()
       .notEmpty()
@@ -16,6 +17,7 @@ const userRegisterValidator = () => {
       .withMessage("Username must be in lowercase")
       .isLength({ min: 3 })
       .withMessage("Username must be at least 3 characters long"),
+
     body("password")
       .trim()
       .notEmpty()
@@ -26,13 +28,42 @@ const userRegisterValidator = () => {
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[~!@#$%^&*()_+=-`])[A-Za-z\d~!@#$%^&*()_+=-`]{8,}$/,
       )
       .withMessage(
-        "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character (~!@#$%^&*()_+=-`)",
+        "Password must contain at least one uppercase, one lowercase, one number, and one special character (~!@#$%^&*()_+=-`)",
       ),
+
     body("fullName")
-      .optional()
       .trim()
+      .notEmpty()
+      .withMessage("Full name is required")
       .isLength({ min: 3 })
       .withMessage("Full name must be at least 3 characters long"),
+
+    body("gender")
+      .notEmpty()
+      .withMessage("Gender is required")
+      .isIn(["male", "female", "other"])
+      .withMessage("Gender must be male, female, or other"),
+
+    body("height")
+      .notEmpty()
+      .withMessage("Height is required")
+      .isInt({ min: 30, max: 250 })
+      .withMessage("Height must be between 30 and 250 cm")
+      .toInt(),
+
+    body("weight")
+      .notEmpty()
+      .withMessage("Weight is required")
+      .isInt({ min: 10, max: 250 })
+      .withMessage("Weight must be between 10 and 250 kg")
+      .toInt(),
+
+    body("age")
+      .notEmpty()
+      .withMessage("Age is required")
+      .isInt({ min: 0, max: 150 })
+      .withMessage("Age must be between 0 and 150")
+      .toInt(),
   ];
 };
 

@@ -35,14 +35,6 @@ const registerUser = asyncHandler(async (req, res) => {
   const { username, email, height, weight, age, gender, fullName, password } =
     req.body;
 
-  if (
-    [username, email, height, weight, age, gender, fullName, password].some(
-      (field) => field?.trim() === "",
-    )
-  ) {
-    throw new ApiError(400, "All fields are required");
-  }
-
   const existingUser = await User.findOne({
     $or: [{ username }, { email }],
   });
@@ -51,10 +43,23 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(409, "User with this username or email already exist");
 
   const avatarLocalPath = req.files?.avatar?.[0]?.path;
-  let avatar;
+  let avatar = {
+    url: "https://placehold.co/200x200",
+    localPath: "",
+    publicId: "",
+  };
 
   try {
-    avatar = await uploadOnCloudinary(avatarLocalPath);
+    if (avatarLocalPath) {
+      const uploadedAvatar = await uploadOnCloudinary(avatarLocalPath);
+      if (uploadedAvatar?.url) {
+        avatar = {
+          url: uploadedAvatar.url,
+          localPath: "",
+          publicId: uploadedAvatar.public_id,
+        };
+      }
+    }
 
     console.log("Avatar uploaded", avatar);
   } catch (error) {
@@ -64,11 +69,7 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 
   const user = await User.create({
-    avatar: {
-      url: avatar.url || `https://placehold.co/200x200`,
-      localPath: "",
-      publicId: avatar.public_id || "",
-    },
+    avatar,
     username,
     email,
     height,
@@ -80,11 +81,11 @@ const registerUser = asyncHandler(async (req, res) => {
     isEmailVerified: false,
   });
 
-  const { unHashedToken, hashedToken, tokenExpiry } =
+  const { unHashedToken, hashedToken, tokenExpirey } =
     user.generateTemporaryToken();
 
   user.emailVerificationToken = hashedToken;
-  user.emailVerificationExpiry = tokenExpiry;
+  user.emailVerificationExpiry = tokenExpirey;
 
   await user.save({ validateBeforeSave: false });
 
@@ -288,11 +289,11 @@ const resendEmailVerification = asyncHandler(async (req, res) => {
   if (user.isEmailVerified)
     throw new ApiError(409, "Email is already verified");
 
-  const { unHashedToken, hashedToken, tokenExpiry } =
+  const { unHashedToken, hashedToken, tokenExpirey } =
     user.generateTemporaryToken();
 
   user.emailVerificationToken = hashedToken;
-  user.emailVerificationExpiry = tokenExpiry;
+  user.emailVerificationExpiry = tokenExpirey;
 
   await user.save({ validateBeforeSave: false });
   await sendEmail({
@@ -368,11 +369,11 @@ const forgotPasswordRequest = asyncHandler(async (req, res) => {
 
   if (!user) throw new ApiError(404, "User not found", []);
 
-  const { unHashedToken, hashedToken, tokenExpiry } =
+  const { unHashedToken, hashedToken, tokenExpirey } =
     user.generateTemporaryToken();
 
   user.forgotPasswordToken = hashedToken;
-  user.forgotPasswordExpiry = tokenExpiry;
+  user.forgotPasswordExpiry = tokenExpirey;
 
   await user.save({ validateBeforeSave: false });
 

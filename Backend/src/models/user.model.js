@@ -34,18 +34,12 @@ const userSchema = new Schema(
     },
     height: {
       type: Number, // in cm
-      min: 30,
-      max: 250,
     },
     weight: {
       type: Number, // in kg
-      min: 10,
-      max: 250,
     },
     age: {
       type: Number,
-      min: 0,
-      max: 150,
     },
     gender: {
       type: String,
