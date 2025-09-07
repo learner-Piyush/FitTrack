@@ -52,6 +52,21 @@ const dietSchema = new Schema(
       default: 0,
       min: 0,
     },
+    totalProtein: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    totalCarbs: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    totalFat: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
   },
   {
     timestamps: true,
@@ -60,12 +75,26 @@ const dietSchema = new Schema(
 
 dietSchema.pre("save", function (next) {
   if (this.foodItems && this.foodItems.length > 0) {
-    this.totalCalories = this.foodItems.reduce(
-      (sum, item) => sum + (item.calories || 0),
-      0,
+    const totals = this.foodItems.reduce(
+      (acc, item) => {
+        acc.calories += item.calories || 0;
+        acc.protein += item.protein || 0;
+        acc.carbs += item.carbs || 0;
+        acc.fat += item.fat || 0;
+        return acc;
+      },
+      { calories: 0, protein: 0, carbs: 0, fat: 0 }
     );
+
+    this.totalCalories = totals.calories;
+    this.totalProtein = totals.protein;
+    this.totalCarbs = totals.carbs;
+    this.totalFat = totals.fat;
   } else {
     this.totalCalories = 0;
+    this.totalProtein = 0;
+    this.totalCarbs = 0;
+    this.totalFat = 0;
   }
   next();
 });
