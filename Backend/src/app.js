@@ -24,11 +24,13 @@ app.use(
 import healthcheckRouter from './routes/healthcheck.route.js'
 import authRouter from './routes/auth.route.js'
 import workoutRouter from './routes/workout.route.js'
+import dietRouter from './routes/diet.route.js'
 
 // routes
 app.use("/api/v1/healthcheck", healthcheckRouter)
 app.use("/api/v1/auth", authRouter)
 app.use("/api/v1/workout", workoutRouter)
+app.use("/api/v1/diet", dietRouter)
 
 app.get("/", (req, res) => {
   res.send("Welcome to FitTrack");
