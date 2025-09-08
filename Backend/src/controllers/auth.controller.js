@@ -200,6 +200,18 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
   if (!(email || height || weight || age || fullName))
     throw new ApiError(400, "Atleast 1 field is required");
 
+  if (email) {
+    const existingUser = await User.findOne({
+      email,
+      _id: {
+        $ne: req.user?._id,
+      },
+    });
+
+    if (existingUser)
+      throw new ApiError(409, "Email is already in use by another account");
+  }
+
   const user = await User.findByIdAndUpdate(
     req.user?._id,
     {
