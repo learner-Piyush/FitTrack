@@ -23,7 +23,7 @@ const sendEmail = async (options) => {
   });
 
   const mail = {
-    from: "mail.fittrackapp@example.com",
+    from: "no-reply@fittrack.com",
     to: options.to || options.email,
     subject: options.subject,
     text: emailTextual,
@@ -37,7 +37,7 @@ const sendEmail = async (options) => {
     console.error(
       "Email service failed silently. Make sure that you have provided your MAILTRAP credentials in the .env file",
     );
-    console.error("Error:", error);
+    throw new Error("Error");
   }
 };
 
