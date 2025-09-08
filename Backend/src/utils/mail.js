@@ -37,9 +37,9 @@ const sendEmail = async (options) => {
     console.log("Email sent successfully");
   } catch (error) {
     console.error(
-      "Email service failed silently. Make sure that you have provided your MAILTRAP credentials in the .env file",
+      "SMTP Error: ", error
     );
-    throw new Error("Error");
+    throw error;
   }
 };
 
