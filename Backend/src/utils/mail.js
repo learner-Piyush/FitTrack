@@ -23,7 +23,7 @@ const sendEmail = async (options) => {
   });
 
   const mail = {
-    from: "no-reply@fittrack.com",
+    from: "mail.fittrackapp@example.com",
     to: options.to || options.email,
     subject: options.subject,
     text: emailTextual,
@@ -31,15 +31,13 @@ const sendEmail = async (options) => {
   };
 
   try {
-    await transporter.verify();
-    console.log("SMTP connection is OK");
     await transporter.sendMail(mail);
     console.log("Email sent successfully");
   } catch (error) {
     console.error(
-      "SMTP Error: ", error
+      "Email service failed silently. Make sure that you have provided your MAILTRAP credentials in the .env file",
     );
-    throw error;
+    console.error("Error:", error);
   }
 };
 
