@@ -79,7 +79,7 @@ const updateWorkout = asyncHandler(async (req, res) => {
     },
     {
       new: true,
-      runValidators: true
+      runValidators: true,
     },
   );
 

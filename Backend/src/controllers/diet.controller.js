@@ -54,7 +54,8 @@ const getDietLogById = asyncHandler(async (req, res) => {
 const updateDietLog = asyncHandler(async (req, res) => {
   const { dietId } = req.params;
 
-  if (!mongoose.Types.ObjectId.isValid(dietId)) throw new ApiError(400, "Invalid diet log ID format");
+  if (!mongoose.Types.ObjectId.isValid(dietId))
+    throw new ApiError(400, "Invalid diet log ID format");
 
   const { date, mealType, foodItems } = req.body;
 
@@ -67,7 +68,8 @@ const updateDietLog = asyncHandler(async (req, res) => {
     userId: req.user._id,
   });
 
-  if (!dietLog) throw new ApiError(404, "Diet log not found or not authorized to update");
+  if (!dietLog)
+    throw new ApiError(404, "Diet log not found or not authorized to update");
 
   if (date) dietLog.date = date;
   if (mealType) dietLog.mealType = mealType;
@@ -83,14 +85,16 @@ const updateDietLog = asyncHandler(async (req, res) => {
 const deleteDietLog = asyncHandler(async (req, res) => {
   const { dietId } = req.params;
 
-  if (!mongoose.Types.ObjectId.isValid(dietId)) throw new ApiError(400, "Invalid diet log ID format");
+  if (!mongoose.Types.ObjectId.isValid(dietId))
+    throw new ApiError(400, "Invalid diet log ID format");
 
   const dietLog = await Diet.findOneAndDelete({
     _id: dietId,
     userId: req.user._id,
   });
 
-  if (!dietLog) throw new ApiError(404, "Diet log not found or not authorized to delete");
+  if (!dietLog)
+    throw new ApiError(404, "Diet log not found or not authorized to delete");
 
   return res
     .status(200)
